@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inkémon - Cutting-Edge Products</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
@@ -133,6 +131,14 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
+            visibility: hidden; /* Hidden by default */
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s ease-in-out;
+        }
+
+        .modal-overlay.show {
+            visibility: visible;
+            opacity: 1;
         }
 
         .modal-content {
@@ -145,6 +151,12 @@
             position: relative;
             border: 2px solid #2563eb; /* border-blue-600 */
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-20px);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
         }
 
         .modal-title {
@@ -158,6 +170,7 @@
             color: #d1d5db; /* text-gray-300 */
             font-size: 1.125rem; /* text-lg */
             margin-bottom: 1.5rem;
+            text-align: left;
         }
 
         .modal-close-btn {
@@ -167,6 +180,7 @@
             color: #9ca3af; /* text-gray-400 */
             transition: color 0.2s ease-in-out;
             cursor: pointer;
+            font-size: 1.5rem;
         }
 
         .modal-close-btn:hover {
@@ -193,26 +207,20 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Header -->
     <header class="bg-black text-white shadow-lg sticky top-0 z-50 border-b-2 border-blue-600">
         <nav class="container mx-auto pl-4 py-3 flex items-center justify-between space-x-6">
-            <!-- Logo and Navigation Links Group -->
             <div class="flex items-center space-x-3 cursor-pointer" onclick="showPage('home-page')">
-                <!-- Logo - Using the provided image URL -->
                 <div class="p-2 bg-blue-600 rounded-full overflow-hidden flex items-center justify-center">
                     <img src="https://TattiGand.github.io/inkemon/images/my_thing.png" alt="Inkémon Logo" class="w-12 h-12 object-cover rounded-full">
                 </div>
                 <span class="text-2xl font-bold text-blue-400">Inkémon</span>
             </div>
-            <!-- Navigation Links - Now directly beside the logo group for desktop, no outer box -->
             <div class="hidden md:flex items-center space-x-4">
                 <a href="#" class="nav-link text-lg px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300" data-page="home">Home</a>
                 <a href="#" class="nav-link text-lg px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300" data-page="products">Products</a>
                 <a href="#" class="nav-link text-lg px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300" data-page="faq">FAQ</a>
             </div>
-            <!-- Cart Button (Auth elements removed) -->
             <div class="flex items-center space-x-4">
-                <!-- Removed auth-status div and auth-button -->
                 <a href="#" class="nav-link text-lg px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-300 flex items-center space-x-2" data-page="cart">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart">
                         <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
@@ -228,7 +236,6 @@
                 </div>
             </div>
         </nav>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-gray-900 py-2">
             <a href="#" class="block px-4 py-2 text-lg hover:bg-blue-700 transition-colors duration-300 nav-link" data-page="home">Home</a>
             <a href="#" class="block px-4 py-2 text-lg hover:bg-blue-700 transition-colors duration-300 nav-link" data-page="products">Products</a>
@@ -236,11 +243,8 @@
         </div>
     </header>
 
-    <!-- Main Content Area -->
     <main class="flex-grow">
-        <!-- Home Page Section -->
         <section id="home-page" class="page-section active">
-            <!-- Hero Section - Added hero-animated-bg class -->
             <div class="hero-animated-bg text-white py-20 md:py-32 text-center rounded-b-xl shadow-lg overflow-hidden">
                 <div class="container mx-auto px-4">
                     <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">
@@ -249,7 +253,6 @@
                     <p class="text-lg md:text-xl text-blue-200 mb-8">
                         Engineered for precision, designed for tomorrow.
                     </p>
-                    <!-- New button to navigate to products page (all products) -->
                     <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
                         <button class="nav-link bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-700 transition-colors duration-300 shadow-lg transform hover:scale-105" data-page="products">
                             Shop All Products
@@ -258,7 +261,6 @@
                 </div>
             </div>
 
-            <!-- Features Section -->
             <div class="bg-gray-900 py-16">
                 <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
                     <div class="flex flex-col items-center p-6 bg-gray-800 rounded-xl shadow-lg">
@@ -271,24 +273,21 @@
                         <h3 class="text-xl font-semibold mb-2">Secure Payment</h3>
                         <p class="text-gray-400">100% secure payment processing</p>
                     </div>
-<div class="flex flex-col items-center p-6 bg-gray-800 rounded-xl shadow-lg text-center">
-    <div class="p-4 bg-blue-600 rounded-full mb-4">
-        <!-- White stroke headphone icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-headphones">
-            <path d="M3 18v-2a9 9 0 0 1 18 0v2"/>
-            <path d="M21 18a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-4"/>
-            <path d="M3 18a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-4"/>
-        </svg>
-    </div>
-    <h3 class="text-xl font-semibold text-white mb-2">24/7 Support</h3>
-    <p class="text-gray-400">Round-the-clock customer support</p>
-</div>
-
+                    <div class="flex flex-col items-center p-6 bg-gray-800 rounded-xl shadow-lg text-center">
+                        <div class="p-4 bg-blue-600 rounded-full mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-headphones">
+                                <path d="M3 18v-2a9 9 0 0 1 18 0v2"/>
+                                <path d="M21 18a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-4"/>
+                                <path d="M3 18a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-4"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-2">24/7 Support</h3>
+                        <p class="text-gray-400">Round-the-clock customer support</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Products Page Section -->
         <section id="products-page" class="page-section">
             <div class="container mx-auto px-4 py-12">
                 <h2 class="text-4xl font-bold text-center mb-4 text-blue-400">Our <span class="text-white">Products</span></h2>
@@ -299,13 +298,11 @@
                     <input type="text" id="product-search-input" placeholder="Search products..." class="w-full md:w-1/3 p-3 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500 text-white placeholder-gray-400">
                     <div class="flex flex-wrap justify-center md:justify-end gap-3">
                         <button class="filter-button px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-300 text-white font-medium" data-category="all">All</button>
-                        <button class="filter-button px-5 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors duration-300 text-gray-300 font-medium" data-category="naruto-anime">Naruto Anime</button>
                         <button class="filter-button px-5 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors duration-300 text-gray-300 font-medium" data-category="pokemon">Pokemon</button>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="product-list">
-                    <!-- New Pokemon Products from uploaded images -->
                     <div class="product-card bg-gray-800 rounded-xl shadow-lg overflow-hidden p-6 relative transition-transform duration-300 hover:scale-103 hover:shadow-blue-500/50" data-category="pokemon">
                         <button class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart">
@@ -449,310 +446,113 @@
                         <p class="text-gray-400 mb-4">₹100</p>
                         <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-md add-to-cart" data-name="Staryu Pokémon TCG Card" data-price="75">Add to Cart</button>
                     </div>
-
-                    <!-- Naruto Anime Product Card (Existing) -->
-                    <div class="product-card bg-gray-800 rounded-xl shadow-lg overflow-hidden p-6 relative transition-transform duration-300 hover:scale-103 hover:shadow-blue-500/50" data-category="naruto-anime">
-                        <button class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors duration-200">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart">
-                                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
-                            </svg>
-                        </button>
-                        <div class="w-full h-48 bg-gray-700 flex items-center justify-center rounded-lg mb-4">
-                            <img src="https://placehold.co/150x150/007bff/ffffff?text=Naruto+Cards" alt="Topps Animax 2024 Official Naruto Collectible Card Game" class="w-auto h-full object-contain rounded-lg">
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">Topps Animax 2024 Official Naruto Collectible Card Game (Multipack of 4)</h3>
-                        <p class="text-gray-400 text-sm mb-2">Collect your favorite Naruto characters with this official card game multipack. <b>(Multipack of 4)</b></p>
-                        <p class="text-gray-400 mb-4">₹150</p>
-                        <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-md add-to-cart" data-name="Topps Animax 2024 Official Naruto Collectible Card Game (Multipack of 4)" data-price="150">Add to Cart</button>
                     </div>
-                </div>
             </div>
         </section>
 
-        <!-- Cart Page Section -->
         <section id="cart-page" class="page-section">
             <div class="container mx-auto px-4 py-12">
                 <h2 class="text-4xl font-bold text-center mb-8 text-blue-400">Your <span class="text-white">Cart</span></h2>
-
-                <div class="flex flex-col lg:flex-row gap-8">
-                    <!-- Cart Items List -->
-                    <div class="lg:w-2/3 bg-gray-800 rounded-xl shadow-lg p-6">
-                        <h3 class="text-2xl font-semibold mb-6 text-white border-b border-gray-700 pb-4">Shopping Cart</h3>
-                        <div id="cart-items-container" class="space-y-6">
-                            <!-- Cart items will be rendered here by JavaScript -->
-                            <p id="empty-cart-message" class="text-gray-400 text-center text-lg">Your cart is empty.</p>
-                        </div>
+                <div id="cart-items" class="bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+                    <p class="text-gray-400 text-center" id="empty-cart-message">Your cart is empty.</p>
+                </div>
+                <div class="flex flex-col md:flex-row justify-between items-center bg-gray-800 rounded-xl shadow-lg p-6">
+                    <div class="text-xl font-semibold text-white mb-4 md:mb-0">
+                        Total: <span id="cart-total" class="text-blue-400">₹0</span>
                     </div>
-
-                    <!-- Order Summary -->
-                    <div class="lg:w-1/3 bg-gray-800 rounded-xl shadow-lg p-6 h-fit">
-                        <h3 class="text-2xl font-semibold mb-6 text-white border-b border-gray-700 pb-4">Order Summary</h3>
-                        <div class="space-y-4 text-lg">
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-300">Subtotal:</span>
-                                <span class="font-medium text-white">₹<span id="cart-subtotal">0</span></span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-300">Shipping:</span>
-                                <span class="font-medium text-white">₹<span id="cart-shipping">0</span></span>
-                            </div>
-                            <div class="border-t border-gray-700 pt-4 mt-4 flex justify-between items-center text-xl font-bold">
-                                <span class="text-blue-400">Total:</span>
-                                <span class="text-white">₹<span id="cart-total">0</span></span>
-                            </div>
-                            <p class="text-red-500 text-sm mt-4">Only UPI (Paytm, PhonePe) available.</p>
-                        </div>
-                        <button id="proceed-to-checkout-btn" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-md mt-8 text-lg font-semibold">Proceed to Checkout</button>
+                    <div class="flex space-x-4">
+                        <button id="clear-cart-btn" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors duration-300 shadow-md">Clear Cart</button>
+                        <button id="checkout-btn" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors duration-300 shadow-md">Checkout</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Transaction Menu Page Section -->
-        <section id="transaction-menu-page" class="page-section">
+        <section id="checkout-page" class="page-section">
             <div class="container mx-auto px-4 py-12">
-                <h2 class="text-4xl font-bold text-center mb-8 text-blue-400">Complete Your <span class="text-white">Purchase</span></h2>
-
-                <div class="flex flex-col lg:flex-row gap-8">
-                    <!-- Order Details -->
-                    <div class="lg:w-2/3 bg-gray-800 rounded-xl shadow-lg p-6">
-                        <h3 class="text-2xl font-semibold mb-6 text-white border-b border-gray-700 pb-4">Order Details</h3>
-                        <div id="transaction-items-container" class="space-y-4">
-                            <!-- Transaction items will be rendered here by JavaScript -->
-                            <p class="text-gray-400 text-center text-lg">No items in order.</p>
-                        </div>
-                        <div class="space-y-4 text-lg mt-8 pt-4 border-t border-gray-700">
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-300">Subtotal:</span>
-                                <span class="font-medium text-white">₹<span id="transaction-subtotal">0</span></span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-300">Shipping:</span>
-                                <span class="font-medium text-white">₹<span id="transaction-shipping">0</span></span>
-                            </div>
-                            <div class="border-t border-gray-700 pt-4 mt-4 flex justify-between items-center text-xl font-bold">
-                                <span class="text-blue-400">Total:</span>
-                                <span class="text-white">₹<span id="transaction-total">0</span></span>
-                            </div>
-                        </div>
+                <h2 class="text-4xl font-bold text-center mb-8 text-blue-400">Checkout</h2>
+                <div class="bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">Order Summary</h3>
+                    <ul id="checkout-summary" class="text-gray-300 mb-4">
+                        </ul>
+                    <div class="text-xl font-semibold text-white border-t border-gray-700 pt-4">
+                        Total: <span id="checkout-total" class="text-blue-400">₹0</span>
                     </div>
+                </div>
 
-                    <!-- Address and Payment Sections -->
-                    <div class="lg:w-1/3 bg-gray-800 rounded-xl shadow-lg p-6 h-fit">
-                        <!-- Address Section -->
-                        <div id="address-section">
-                            <h3 class="text-2xl font-semibold mb-6 text-white border-b border-gray-700 pb-4">Shipping Address</h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <label for="full-name" class="block text-gray-300 text-sm font-bold mb-2">Full Name</label>
-                                    <input type="text" id="full-name" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 text-white placeholder-gray-400" placeholder="John Doe" required>
-                                </div>
-                                <div>
-                                    <label for="email" class="block text-gray-300 text-sm font-bold mb-2">Email</label>
-                                    <input type="email" id="email" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 text-white placeholder-gray-400" placeholder="you@example.com" required>
-                                </div>
-                                <div>
-                                    <label for="address-line1" class="block text-gray-300 text-sm font-bold mb-2">Address Line 1</label>
-                                    <input type="text" id="address-line1" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 text-white placeholder-gray-400" placeholder="123 Main St" required>
-                                </div>
-                                <div>
-                                    <label for="address-line2" class="block text-gray-300 text-sm font-bold mb-2">Address Line 2 (Optional)</label>
-                                    <input type="text" id="address-line2" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 text-white placeholder-gray-400" placeholder="Apt 4B">
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label for="city" class="block text-gray-300 text-sm font-bold mb-2">City</label>
-                                        <input type="text" id="city" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 text-white placeholder-gray-400" placeholder="Anytown" required>
-                                    </div>
-                                    <div>
-                                        <label for="state" class="block text-gray-300 text-sm font-bold mb-2">State</label>
-                                        <input type="text" id="state" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 text-white placeholder-gray-400" placeholder="State" required>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label for="pincode" class="block text-gray-300 text-sm font-bold mb-2">Pincode</label>
-                                        <input type="text" id="pincode" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 text-white placeholder-gray-400" placeholder="123456" required>
-                                    </div>
-                                    <div>
-                                        <label for="phone-number" class="block text-gray-300 text-sm font-bold mb-2">Phone Number</label>
-                                        <input type="tel" id="phone-number" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-700 border-gray-600 text-white placeholder-gray-400" placeholder="+91XXXXXXXXXX" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <button id="continue-to-payment-btn" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-md mt-8 text-lg font-semibold">Continue to Payment</button>
+                <div class="bg-gray-800 rounded-xl shadow-lg p-6">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">Shipping Information</h3>
+                    <form id="shipping-form" class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-gray-300 text-sm font-bold mb-2">Full Name:</label>
+                            <input type="text" id="name" name="name" class="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 bg-gray-900 text-white leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500" required>
                         </div>
-
-                        <!-- Payment Information Section (with QR code) -->
-                        <div id="payment-section" class="hidden mt-8">
-                            <h3 class="text-2xl font-semibold mb-6 text-white border-b border-gray-700 pb-4">Payment Information</h3>
-                            <div class="space-y-4 text-center">
-                                <p class="text-gray-400">Scan the QR code below or use the UPI details to complete your payment:</p>
-                                <div class="bg-gray-700 p-4 rounded-lg flex flex-col items-center justify-center">
-                                    <img src="upi.png" alt="UPI QR Code" class="w-48 h-48 object-contain rounded-lg mb-4">
-                                    <p class="text-gray-300"><strong>Name:</strong> <span id="upi-name">Anila Kumari</span></p>
-                                    <p class="text-gray-300"><strong>UPI Handle:</strong> <span id="upi-handle">6203903306@ptyes</span></p>
-                                    <p class="text-red-400 text-xs mt-4">
-                                        <strong>Important:</strong> Complete your payment using your UPI app (Paytm, PhonePe, etc.) before clicking "I have paid".
-                                    </p>
-                                </div>
-                            </div>
-                            <button id="payment-confirmed-btn" class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors duration-300 shadow-md mt-8 text-lg font-semibold">I have paid</button>
+                        <div>
+                            <label for="address" class="block text-gray-300 text-sm font-bold mb-2">Address:</label>
+                            <input type="text" id="address" name="address" class="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 bg-gray-900 text-white leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500" required>
                         </div>
-                        <button id="back-to-cart-btn" class="w-full bg-gray-700 text-white py-3 rounded-lg hover:bg-gray-600 transition-colors duration-300 shadow-md mt-4 text-lg font-semibold">Back to Cart</button>
-                    </div>
+                        <div>
+                            <label for="email" class="block text-gray-300 text-sm font-bold mb-2">Email:</label>
+                            <input type="email" id="email" name="email" class="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 bg-gray-900 text-white leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500" required>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4 text-white">Payment Information</h3>
+                        <p class="text-gray-400 mb-4">We currently only accept UPI payments via PhonePe and Paytm. We ship items only on Saturdays. Our refund policy is for 5 days from the date of delivery.</p>
+                        <button type="submit" id="place-order-btn" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-md w-full">Place Order</button>
+                    </form>
+                </div>
+                <div class="flex justify-center mt-6">
+                    <button id="back-to-cart-btn" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors duration-300 shadow-md">Back to Cart</button>
                 </div>
             </div>
         </section>
 
-        <!-- FAQ Page Section -->
         <section id="faq-page" class="page-section">
             <div class="container mx-auto px-4 py-12">
-                <h2 class="text-4xl font-bold text-center mb-4 text-blue-400">Frequently Asked <span class="text-white">Questions</span></h2>
-                <p class="text-lg text-center text-gray-400 mb-12">
-                    Find answers to common questions about Inkémon. Can't find what you're looking for? Contact our support team anytime!
-                </p>
-
-                <div class="max-w-3xl mx-auto space-y-6">
-                    <!-- General Questions -->
-                    <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-                        <div class="bg-blue-600 text-white text-xl font-semibold p-4 rounded-t-xl">General Questions</div>
-                        <div class="accordion-item">
-                            <div class="accordion-header text-white font-medium">
-                                What is Inkémon?
-                                <span class="arrow">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down">
-                                        <path d="m6 9 6 6 6-6"/>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div class="accordion-content text-gray-300">
-                                <p>Inkémon is your premier destination for cutting-edge products, engineered with precision and designed for tomorrow. We offer a curated selection of innovative items to enhance your daily life.</p>
-                            </div>
+                <h2 class="text-4xl font-bold text-center mb-8 text-blue-400">Frequently Asked Questions</h2>
+                <div class="bg-gray-800 rounded-xl shadow-lg p-6">
+                    <div class="accordion-item">
+                        <div class="accordion-header text-white font-semibold text-lg">
+                            What payment methods do you accept?
+                            <span class="arrow">&#9660;</span>
                         </div>
-                        <div class="accordion-item">
-                            <div class="accordion-header text-white font-medium">
-                                Is Inkémon available internationally?
-                                <span class="arrow">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down">
-                                        <path d="m6 9 6 6 6-6"/>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div class="accordion-content text-gray-300">
-                                <p>No, we only ship in India.</p>
-                            </div>
+                        <div class="accordion-content text-gray-300">
+                            <p class="py-2">We currently only accept UPI payments via PhonePe and Paytm.</p>
                         </div>
                     </div>
-
-                    <!-- Orders & Shipping -->
-                    <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-                        <div class="bg-blue-600 text-white text-xl font-semibold p-4 rounded-t-xl">Orders & Shipping</div>
-                        <div class="accordion-item">
-                            <div class="accordion-header text-white font-medium">
-                                Can I track my order?
-                                <span class="arrow">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down">
-                                        <path d="m6 9 6 6 6-6"/>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div class="accordion-content text-gray-300">
-                                <p>Absolutely! Once your order is shipped, you will receive a tracking number via email. You can use this number to track the status of your delivery on our website or the carrier's site.</p>
-                            </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header text-white font-semibold text-lg">
+                            When do you ship items?
+                            <span class="arrow">&#9660;</span>
                         </div>
-                        <div class="accordion-item">
-                            <div class="accordion-header text-white font-medium">
-                                What if my item arrives damaged?
-                                <span class="arrow">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down">
-                                        <path d="m6 9 6 6 6-6"/>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div class="accordion-content text-gray-300">
-                                <p>In the rare event that your item arrives damaged, please contact our customer support team immediately with photos of the damage. We will arrange for a replacement or refund.</p>
-                            </div>
+                        <div class="accordion-content text-gray-300">
+                            <p class="py-2">We ship items only on Saturdays.</p>
                         </div>
                     </div>
-
-                    <!-- Returns & Refunds -->
-                    <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-                        <div class="bg-blue-600 text-white text-xl font-semibold p-4 rounded-t-xl">Returns & Refunds</div>
-                        <div class="accordion-item">
-                            <div class="accordion-header text-white font-medium">
-                                What is your return policy?
-                                <span class="arrow">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down">
-                                        <path d="m6 9 6 6 6-6"/>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div class="accordion-content text-gray-300">
-                                <p>We offer a 5-day return policy for most products. Items must be in their original condition and packaging. Please visit our Returns page for full details and instructions.</p>
-                            </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header text-white font-semibold text-lg">
+                            What is your refund policy?
+                            <span class="arrow">&#9660;</span>
                         </div>
-                        <div class="accordion-item">
-                            <div class="accordion-header text-white font-medium">
-                                How do I return an item?
-                                <span class="arrow">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down">
-                                        <path d="m6 9 6 6 6-6"/>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div class="accordion-content text-gray-300">
-                                <p>To initiate a return, call the number which is in support or mail with the mail you entered while checkout.</p>
-                            </div>
+                        <div class="accordion-content text-gray-300">
+                            <p class="py-2">Our refund policy is for 5 days from the date of delivery.</p>
                         </div>
                     </div>
-
-                    <!-- Payment & Security -->
-                    <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-                        <div class="bg-blue-600 text-white text-xl font-semibold p-4 rounded-t-xl">Payment & Security</div>
-                        <div class="accordion-item">
-                            <div class="accordion-header text-white font-medium">
-                                What payment methods do you accept?
-                                <span class="arrow">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down">
-                                        <path d="m6 9 6 6 6-6"/>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div class="accordion-content text-gray-300">
-                                <p>We accept Cash on Delivery, UPI, Credit Card, and Debit Card. All transactions are encrypted for your security.</p>
-                            </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header text-white font-semibold text-lg">
+                            How do I track my order?
+                            <span class="arrow">&#9660;</span>
                         </div>
-                        <div class="accordion-item">
-                            <div class="accordion-header text-white font-medium">
-                                Is my payment information secure?
-                                <span class="arrow">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down">
-                                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div class="accordion-content text-gray-300">
-                                <p>Yes, your payment information is highly secure. We use industry-standard SSL encryption and comply with PCI DSS standards to protect your data during all transactions.</p>
-                            </div>
+                        <div class="accordion-content text-gray-300">
+                            <p class="py-2">Once your order is shipped, you will receive an email with tracking information. You can use this to track your order directly on the courier's website.</p>
                         </div>
                     </div>
-
-                    <!-- Products & Quality -->
-                    <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-                        <div class="bg-blue-600 text-white text-xl font-semibold p-4 rounded-t-xl">Products & Quality</div>
-                        <div class="accordion-item">
-                            <div class="accordion-header text-white font-medium">
-                                How do you ensure product quality?
-                                <span class="arrow">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucude-chevron-down">
-                                        <path d="m6 9 6 6 6-6"/>
-                                    </svg>
-                                </span>
-                            </div>
-                            <div class="accordion-content text-gray-300">
-                                <p>We maintain strict quality control standards. All products undergo rigorous testing and inspection to ensure they meet our high benchmarks for performance, durability, and craftsmanship.</p>
-                            </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header text-white font-semibold text-lg">
+                            Do you offer international shipping?
+                            <span class="arrow">&#9660;</span>
+                        </div>
+                        <div class="accordion-content text-gray-300">
+                            <p class="py-2">Currently, we only ship within India. We are working on expanding our shipping options in the future!</p>
                         </div>
                     </div>
                 </div>
@@ -760,599 +560,408 @@
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-black text-white py-12 mt-auto rounded-t-xl shadow-inner">
-        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-            <div class="flex flex-col space-y-4">
-                <div class="flex items-center space-x-3">
-                    <div class="p-2 bg-blue-600 rounded-full overflow-hidden flex items-center justify-center">
-                        <img src="https://TattiGand.github.io/inkemon/images/my_thing.png" alt="Inkémon Logo" class="w-12 h-12 object-cover rounded-full">
-                    </div>
-                    <span class="text-2xl font-bold text-blue-400">Inkémon</span>
+    <footer class="bg-black text-white py-8 mt-auto border-t-2 border-blue-600">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0">
+                <div class="text-2xl font-bold text-blue-400">Inkémon</div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors duration-300 nav-link" data-page="home">Home</a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors duration-300 nav-link" data-page="products">Products</a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors duration-300 nav-link" data-page="faq">FAQ</a>
+                    <button id="info-modal-btn" class="text-gray-300 hover:text-white transition-colors duration-300">Store Information</button>
                 </div>
-                <p class="text-gray-400 max-w-sm">
-                    Your destination for cutting-edge products with precision engineering and tomorrow's design.
-                </p>
             </div>
-            <div class="flex flex-col items-start md:items-end space-y-4">
-                <h3 class="text-xl font-semibold text-white mb-2">CONTACT</h3>
-                <p class="text-gray-400">rudsat29@gmail.com</p>
-                <p class="text-400">+91 9303270961</p>
+            <p class="text-gray-500">&copy; 2024 Inkémon. All rights reserved.</p>
+            <div class="flex justify-center space-x-4 mt-6">
+                <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33V22C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12.488 1.92a.75.75 0 00-.976 0L4.604 7.218a.75.75 0 00.976 1.154l.43-.362V12.75a8.25 8.25 0 008.25 8.25h.75A8.25 8.25 0 0022 12.75V8H18.75a.75.75 0 000 1.5h2.25v3.25a6.75 6.75 0 01-13.5 0V8.01a.75.75 0 00-.976-.118l-.43.362a.75.75 0 00-.976 0L1.512 7.218a.75.75 0 00.976-1.154L12 1.92zM6.75 16.5a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H6.75zm3.75 0a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H10.5zm3.75 0a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H14.25zm3.75 0a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H18z" />
+                    </svg>
+                </a>
             </div>
-        </div>
-        <div class="text-center text-gray-500 mt-8">
-            &copy; 2025 Inkémon. All rights reserved.
         </div>
     </footer>
 
-    <!-- Toast Notification -->
-    <div id="toast-message" class="toast"></div>
-
-    <!-- Pop-up Modal Structure -->
-    <div id="welcome-modal" class="modal-overlay hidden">
+    <div id="info-modal-overlay" class="modal-overlay">
         <div class="modal-content">
-            <button id="close-modal-btn" class="modal-close-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
-                    <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
-                </svg>
-            </button>
-            <h3 class="modal-title">Welcome to Inkémon!</h3>
+            <span id="info-modal-close-btn" class="modal-close-btn">&times;</span>
+            <h2 class="modal-title">Store Information</h2>
             <p class="modal-text">
-                Please note: We currently only ship orders on <strong>Saturdays</strong>.
-                Kindly place your orders accordingly to ensure timely processing.<br>
-                Currently, only UPI (Paytm, PhonePe) is available.
+                <strong>Shipping:</strong> We ship items only on Saturdays.
             </p>
-            <button id="acknowledge-modal-btn" class="modal-action-btn">
-                Got It!
-            </button>
+            <p class="modal-text">
+                <strong>UPI Payments:</strong> Currently available only via PhonePe and Paytm.
+            </p>
+            <p class="modal-text">
+                <strong>Refund Policy:</strong> Refunds are applicable for 5 days from the date of delivery.
+            </p>
+            <button id="info-modal-ok-btn" class="modal-action-btn">Got It!</button>
         </div>
     </div>
 
+    <div id="toast" class="toast"></div>
+
     <script>
-        // Global array to store cart items
-        let cartItems = [];
-        const SHIPPING_CHARGE = 123; // Fixed shipping charge
-        const MAX_PRODUCT_QUANTITY = 5; // Maximum quantity for a single product in the cart
-        const MAX_SHIPPING_DISTANCE = 100; // Maximum allowed shipping distance in km (still relevant for address validation if needed later)
-
-        // Global variable to hold the currently active category for product filtering
-        let currentActiveCategory = 'all';
-
-        // --- Functions moved to global scope for accessibility ---
-
-        // Function to update cart count in header
-        const updateCartCount = () => {
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pageSections = document.querySelectorAll('.page-section');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const productList = document.getElementById('product-list');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotalSpan = document.getElementById('cart-total');
             const cartCountSpan = document.getElementById('cart-count');
-            if (cartCountSpan) {
+            const clearCartBtn = document.getElementById('clear-cart-btn');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const productSearchInput = document.getElementById('product-search-input');
+            const filterButtons = document.querySelectorAll('.filter-button');
+
+            // Checkout page elements
+            const checkoutSummary = document.getElementById('checkout-summary');
+            const checkoutTotal = document.getElementById('checkout-total');
+            const shippingForm = document.getElementById('shipping-form');
+            const placeOrderBtn = document.getElementById('place-order-btn');
+            const backToCartBtn = document.getElementById('back-to-cart-btn');
+
+            // Modal elements
+            const infoModalOverlay = document.getElementById('info-modal-overlay');
+            const infoModalCloseBtn = document.getElementById('info-modal-close-btn');
+            const infoModalOkBtn = document.getElementById('info-modal-ok-btn');
+            const infoModalOpenBtn = document.getElementById('info-modal-btn'); // Button in footer to open modal
+
+
+            let cartItems = [];
+
+            // Function to show toast messages
+            function showToast(message) {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 10000); // 10 seconds
+            }
+
+            // Page navigation logic
+            function showPage(pageId) {
+                pageSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(pageId).classList.add('active');
+
+                // Update active link in header for desktop and mobile
+                navLinks.forEach(link => {
+                    if (link.dataset.page === pageId.replace('-page', '')) {
+                        link.classList.add('bg-blue-700');
+                    } else {
+                        link.classList.remove('bg-blue-700');
+                    }
+                });
+
+                // Hide mobile menu after selection
+                mobileMenu.classList.add('hidden');
+            }
+
+            // Toggle mobile menu
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            // Navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = e.target.dataset.page;
+                    showPage(`${page}-page`);
+                });
+            });
+
+            // Product data (updated to remove Naruto card)
+            const products = [
+                {
+                    name: "Bellsprout Pokémon TCG Card - Common",
+                    price: 100,
+                    image: "https://TattiGand.github.io/inkemon/images/bellsprout.png",
+                    category: "pokemon"
+                },
+                {
+                    name: "Butterfree Pokémon TCG Card - Stage 2",
+                    price: 120,
+                    image: "https://TattiGand.github.io/inkemon/images/butterfree.png",
+                    category: "pokemon"
+                },
+                {
+                    name: "Chatot Pokémon TCG Card - Basic",
+                    price: 100,
+                    image: "https://TattiGand.github.io/inkemon/images/c.png",
+                    category: "pokemon"
+                },
+                {
+                    name: "Exeggcute Pokémon TCG Card - Basic",
+                    price: 110,
+                    image: "https://TattiGand.github.io/inkemon/images/exeggcute.png",
+                    category: "pokemon"
+                },
+                {
+                    name: "Hitmonchan Pokémon TCG Card - Basic",
+                    price: 130,
+                    image: "https://TattiGand.github.io/inkemon/images/hitmonchan.png",
+                    category: "pokemon"
+                },
+                {
+                    name: "Lapras Pokémon TCG Card - Basic",
+                    price: 150,
+                    image: "https://TattiGand.github.io/inkemon/images/lapras.png",
+                    category: "pokemon"
+                },
+                {
+                    name: "Seaking Pokémon TCG Card - Stage 1",
+                    price: 100,
+                    image: "https://TattiGand.github.io/inkemon/images/seaking.png",
+                    category: "pokemon"
+                },
+                {
+                    name: "Staryu Pokémon TCG Card - Basic",
+                    price: 100,
+                    image: "https://TattiGand.github.io/inkemon/images/staryu.png",
+                    category: "pokemon"
+                }
+            ];
+
+            // Render products
+            function renderProducts(filteredProducts = products) {
+                productList.innerHTML = '';
+                if (filteredProducts.length === 0) {
+                    productList.innerHTML = `<p class="text-center text-gray-400 col-span-full">No products found matching your criteria.</p>`;
+                    return;
+                }
+                filteredProducts.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = `product-card bg-gray-800 rounded-xl shadow-lg overflow-hidden p-6 relative transition-transform duration-300 hover:scale-103 hover:shadow-blue-500/50`;
+                    productCard.dataset.category = product.category;
+                    productCard.innerHTML = `
+                        <button class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart">
+                                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                            </svg>
+                        </button>
+                        <div class="w-full h-48 bg-gray-700 flex items-center justify-center rounded-lg mb-4">
+                            <img src="${product.image}" alt="${product.name}" class="w-auto h-full object-contain rounded-lg">
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">${product.name}</h3>
+                        <p class="text-gray-400 text-sm mb-2">${product.description || ''}</p>
+                        <p class="text-gray-400 mb-4">₹${product.price.toLocaleString()}</p>
+                        <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-md add-to-cart" data-name="${product.name}" data-price="${product.price}">Add to Cart</button>
+                    `;
+                    productList.appendChild(productCard);
+                });
+            }
+
+            // Add to cart functionality
+            if (productList) {
+                productList.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('add-to-cart')) {
+                        const name = e.target.dataset.name;
+                        const price = parseFloat(e.target.dataset.price);
+                        const existingItemIndex = cartItems.findIndex(item => item.name === name);
+
+                        if (existingItemIndex > -1) {
+                            cartItems[existingItemIndex].quantity++;
+                        } else {
+                            cartItems.push({ name, price, quantity: 1 });
+                        }
+                        updateCartCount();
+                        renderCartItems();
+                        showToast(`${name} added to cart!`);
+                    }
+                });
+            }
+
+            // Render cart items
+            function renderCartItems() {
+                cartItemsContainer.innerHTML = ''; // Clear existing items
+                if (cartItems.length === 0) {
+                    emptyCartMessage.classList.remove('hidden');
+                    cartTotalSpan.textContent = `₹0`;
+                    return;
+                }
+                emptyCartMessage.classList.add('hidden');
+
+                let total = 0;
+                cartItems.forEach((item, index) => {
+                    total += item.price * item.quantity;
+                    const cartItemDiv = document.createElement('div');
+                    cartItemDiv.className = 'flex justify-between items-center bg-gray-700 p-4 rounded-lg mb-2';
+                    cartItemDiv.innerHTML = `
+                        <div class="text-white">
+                            ${item.name} (x${item.quantity}) - ₹${(item.price * item.quantity).toLocaleString()}
+                        </div>
+                        <button class="remove-from-cart text-red-400 hover:text-red-600 transition-colors duration-300" data-index="${index}">
+                            Remove
+                        </button>
+                    `;
+                    cartItemsContainer.appendChild(cartItemDiv);
+                });
+                cartTotalSpan.textContent = `₹${total.toLocaleString()}`;
+            }
+
+            // Update cart count in header
+            function updateCartCount() {
                 const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
                 cartCountSpan.textContent = totalItems;
             }
-        };
 
-        // Function to show a toast notification
-        const showToast = (message) => {
-            const toastMessage = document.getElementById('toast-message');
-            if (toastMessage) {
-                toastMessage.textContent = message;
-                toastMessage.classList.add('show');
-                setTimeout(() => {
-                    toastMessage.classList.remove('show');
-                }, 10000); // Hide after 10 seconds
-            }
-        };
-
-        // Function to add item to cart
-        const addItemToCart = async (name, price) => {
-            const trimmedName = name.trim(); // Trim name for consistency
-            const existingItem = cartItems.find(item => item.name === trimmedName);
-            if (existingItem) {
-                if (existingItem.quantity < MAX_PRODUCT_QUANTITY) {
-                    existingItem.quantity++;
-                    showToast(`${trimmedName} quantity increased to ${existingItem.quantity}!`);
-                } else {
-                    showToast(`Maximum quantity (${MAX_PRODUCT_QUANTITY}) reached for ${trimmedName}.`);
-                }
-            } else {
-                cartItems.push({ name: trimmedName, price, quantity: 1 });
-                showToast(`${trimmedName} added to cart!`);
-            }
-            updateCartCount();
-            renderCartItems(); // Call renderCartItems to update cart display immediately
-        };
-
-        // Function to render cart items on the cart page
-        const renderCartItems = () => {
-            const cartItemsContainer = document.getElementById('cart-items-container');
-            const emptyCartMessage = document.getElementById('empty-cart-message');
-
-            if (!cartItemsContainer || !emptyCartMessage) {
-                console.warn("Cart elements not found. Cannot render cart items.");
-                return;
-            }
-
-            console.log("renderCartItems: Current cartItems before rendering:", JSON.stringify(cartItems)); // Debug log
-            cartItemsContainer.innerHTML = ''; // Clear existing items
-            if (cartItems.length === 0) {
-                emptyCartMessage.style.display = 'block';
-            } else {
-                emptyCartMessage.style.display = 'none';
-                cartItems.forEach((item) => {
-                    console.log(`DEBUG: Rendering item '${item.name}' with quantity: ${item.quantity}`); // Debug log to check quantity during rendering
-                    const itemElement = document.createElement('div');
-                    itemElement.classList.add('flex', 'items-center', 'justify-between', 'bg-gray-700', 'p-4', 'rounded-lg', 'shadow-md');
-                    itemElement.innerHTML = `
-                        <div class="flex items-center space-x-4">
-                            <div class="w-16 h-16 bg-gray-600 rounded-md flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image text-gray-400">
-                                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-lg font-semibold text-white">${item.name}</p>
-                                <p class="text-gray-400">₹${item.price.toLocaleString('en-IN')}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <button class="quantity-btn bg-gray-600 text-white px-3 py-1 rounded-md hover:bg-gray-500 transition-colors duration-200" data-name="${item.name}" data-action="decrease">-</button>
-                            <span class="text-white font-medium quantity-display">${item.quantity}</span>
-                            <button class="quantity-btn bg-gray-600 text-white px-3 py-1 rounded-md hover:bg-gray-500 transition-colors duration-200" data-name="${item.name}" data-action="increase">+</button>
-                            <button class="remove-item-btn text-red-500 hover:text-red-600 transition-colors duration-200" data-name="${item.name}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2">
-                                    <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                                    <line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>
-                                </svg>
-                            </button>
-                        </div>
-                    `;
-                    cartItemsContainer.appendChild(itemElement);
+            // Remove from cart functionality
+            if (cartItemsContainer) {
+                cartItemsContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('remove-from-cart')) {
+                        const index = parseInt(e.target.dataset.index);
+                        if (cartItems[index].quantity > 1) {
+                            cartItems[index].quantity--;
+                        } else {
+                            cartItems.splice(index, 1);
+                        }
+                        updateCartCount();
+                        renderCartItems();
+                        showToast('Item removed from cart!');
+                    }
                 });
             }
-            calculateCartTotals();
-            console.log("renderCartItems: HTML after rendering:", cartItemsContainer.innerHTML); // Debug log
-        };
 
-        // Function to calculate shipping (now always 0)
-        const calculateShipping = (distance) => {
-            // Shipping is now a fixed charge
-            return SHIPPING_CHARGE;
-        };
-
-        // Function to render transaction summary on the transaction page
-        const renderTransactionSummary = () => {
-            const transactionItemsContainer = document.getElementById('transaction-items-container');
-            const transactionSubtotalSpan = document.getElementById('transaction-subtotal');
-            const transactionShippingSpan = document.getElementById('transaction-shipping');
-            const transactionTotalSpan = document.getElementById('transaction-total');
-
-            if (!transactionItemsContainer || !transactionSubtotalSpan || !transactionShippingSpan || !transactionTotalSpan) {
-                console.warn("Transaction summary elements not found. Cannot render transaction summary.");
-                return;
+            // Clear cart button
+            if (clearCartBtn) {
+                clearCartBtn.addEventListener('click', () => {
+                    cartItems = [];
+                    updateCartCount();
+                    renderCartItems();
+                    showToast('Cart cleared!');
+                });
             }
 
-            transactionItemsContainer.innerHTML = ''; // Clear existing items
-            if (cartItems.length === 0) {
-                transactionItemsContainer.innerHTML = '<p class="text-gray-400 text-center text-lg">No items in order.</p>';
-            } else {
-                console.log("renderTransactionSummary: Populating transaction items for:", JSON.stringify(cartItems)); // Debug log
+            // Checkout button logic
+            if (checkoutBtn) {
+                checkoutBtn.addEventListener('click', () => {
+                    if (cartItems.length === 0) {
+                        showToast('Your cart is empty. Please add items before checking out.');
+                        return;
+                    }
+                    renderCheckoutSummary();
+                    showPage('checkout-page');
+                });
+            }
+
+            // Render checkout summary
+            function renderCheckoutSummary() {
+                checkoutSummary.innerHTML = '';
+                let total = 0;
                 cartItems.forEach(item => {
-                    console.log(`DEBUG: Adding transaction item '${item.name}' (x${item.quantity})`); // Debug log
-                    const itemElement = document.createElement('div');
-                    itemElement.classList.add('flex', 'justify-between', 'items-center', 'text-gray-300');
-                    itemElement.innerHTML = `
+                    total += item.price * item.quantity;
+                    const listItem = document.createElement('li');
+                    listItem.className = 'flex justify-between mb-2';
+                    listItem.innerHTML = `
                         <span>${item.name} (x${item.quantity})</span>
-                        <span>₹${(item.price * item.quantity).toLocaleString('en-IN')}</span>
+                        <span>₹${(item.price * item.quantity).toLocaleString()}</span>
                     `;
-                    transactionItemsContainer.appendChild(itemElement);
+                    checkoutSummary.appendChild(listItem);
                 });
-            }
-            // Update totals on transaction page
-            let subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            let shipping = SHIPPING_CHARGE;
-            let total = subtotal + shipping;
-
-            transactionSubtotalSpan.textContent = subtotal.toLocaleString('en-IN');
-            transactionShippingSpan.textContent = shipping.toLocaleString('en-IN');
-            transactionTotalSpan.textContent = total.toLocaleString('en-IN');
-        };
-
-        // Function to calculate and update cart totals
-        const calculateCartTotals = () => {
-            const cartSubtotalSpan = document.getElementById('cart-subtotal');
-            const cartShippingSpan = document.getElementById('cart-shipping');
-            const cartTotalSpan = document.getElementById('cart-total');
-
-            if (!cartSubtotalSpan || !cartShippingSpan || !cartTotalSpan) {
-                console.warn("Cart total elements not found. Cannot calculate cart totals.");
-                return;
+                checkoutTotal.textContent = `₹${total.toLocaleString()}`;
             }
 
-            let subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            let shipping = SHIPPING_CHARGE;
-            let total = subtotal + shipping;
-
-            cartSubtotalSpan.textContent = subtotal.toLocaleString('en-IN');
-            cartShippingSpan.textContent = shipping.toLocaleString('en-IN');
-            cartTotalSpan.textContent = total.toLocaleString('en-IN');
-        };
-
-        // Function to filter products based on search query and active category
-        const filterProducts = () => {
-            const productSearchInput = document.getElementById('product-search-input');
-            const filterButtons = document.querySelectorAll('.filter-button');
-
-            const searchQuery = productSearchInput.value.toLowerCase();
-            
-            // Determine the active category based on currentActiveCategory global variable
-            let effectiveCategory = currentActiveCategory;
-            
-            // Update active state for filter buttons on the products page
-            filterButtons.forEach(btn => {
-                if (btn.dataset.category === effectiveCategory) {
-                    btn.classList.add('bg-blue-600', 'text-white');
-                    btn.classList.remove('bg-gray-800', 'text-gray-300');
-                } else {
-                    btn.classList.remove('bg-blue-600', 'text-white');
-                    btn.classList.add('bg-gray-800', 'text-gray-300');
-                }
-            });
-
-            const productListContainer = document.getElementById('product-list');
-            if (!productListContainer) {
-                console.warn("Product list container not found. Cannot filter products.");
-                return;
-            }
-            const cardsToFilter = productListContainer.querySelectorAll('.product-card');
-
-            cardsToFilter.forEach(card => {
-                const productNameElement = card.querySelector('h3');
-                const productDescriptionElement = card.querySelector('p:nth-of-type(1)');
-
-                const productName = productNameElement ? productNameElement.textContent.toLowerCase() : '';
-                const productDescription = productDescriptionElement ? productDescriptionElement.textContent.toLowerCase() : '';
-                
-                const cardCategories = card.dataset.category ? card.dataset.category.split(' ') : [];
-
-                const matchesSearch = productName.includes(searchQuery) || productDescription.includes(searchQuery);
-                const matchesCategory = effectiveCategory === 'all' || cardCategories.includes(effectiveCategory);
-
-                if (matchesSearch && matchesCategory) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        };
-
-        // Function to show a specific page and update active link styling
-        const showPage = async (pageId, category = 'all') => {
-            console.log(`Attempting to show page: ${pageId} with category: ${category}`);
-            const pageSections = document.querySelectorAll('.page-section');
-            const productSearchInput = document.getElementById('product-search-input');
-            const navLinks = document.querySelectorAll('.nav-link');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-            // Hide all page sections first
-            pageSections.forEach(section => {
-                section.classList.remove('active');
-                section.style.display = 'none'; // Ensure display is set to none
-            });
-
-            // Show the target page
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-                targetPage.style.display = 'block'; // Ensure display is set to block
-                console.log(`Page ${pageId} activated.`);
-            } else {
-                console.warn(`Page with ID ${pageId} not found.`);
-            }
-
-            // Handle category setting for products page
-            if (pageId === 'products-page') {
-                currentActiveCategory = category; // Set the global active category
-                if (productSearchInput) productSearchInput.value = ''; // Clear search on category change
-                filterProducts(); // Apply filters immediately
-            } else {
-                // If navigating away from products page, reset search and category filters
-                if (productSearchInput) productSearchInput.value = '';
-                currentActiveCategory = 'all'; // Reset global category
-                // Ensure all product cards are visible when leaving product pages
-                document.querySelectorAll('.product-card').forEach(card => {
-                    card.style.display = 'block';
+            // Product search and filter
+            if (productSearchInput) {
+                productSearchInput.addEventListener('input', (e) => {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const currentCategory = document.querySelector('.filter-button.bg-blue-600').dataset.category;
+                    filterAndSearchProducts(currentCategory, searchTerm);
                 });
             }
 
-            // If navigating to cart page, render cart items
-            if (pageId === 'cart-page') {
-                renderCartItems();
-            } else if (pageId === 'transaction-menu-page') {
-                console.log("showPage: Navigating to transaction page. Current cartItems:", JSON.stringify(cartItems)); // Debug log
-                renderTransactionSummary(); // Call without distance parameter
-                // When entering transaction page, show address section and hide payment section
-                const addressSection = document.getElementById('address-section');
-                const paymentSection = document.getElementById('payment-section');
-                const paymentConfirmedBtn = document.getElementById('payment-confirmed-btn');
+            if (filterButtons) {
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        filterButtons.forEach(btn => {
+                            btn.classList.remove('bg-blue-600', 'text-white');
+                            btn.classList.add('bg-gray-800', 'text-gray-300');
+                        });
+                        e.target.classList.remove('bg-gray-800', 'text-gray-300');
+                        e.target.classList.add('bg-blue-600', 'text-white');
 
-                if (addressSection) addressSection.classList.remove('hidden');
-                if (paymentSection) paymentSection.classList.add('hidden'); // Payment section initially hidden
-                if (paymentConfirmedBtn) paymentConfirmedBtn.classList.add('hidden'); // Ensure confirmed is hidden until address is valid
-            }
-
-            // Update active navigation link styling
-            navLinks.forEach(link => {
-                if (link.dataset.page + '-page' === pageId) {
-                    link.classList.add('bg-blue-600', 'text-white');
-                    link.classList.remove('bg-gray-800', 'text-gray-300');
-                } else {
-                    link.classList.remove('bg-blue-600', 'text-white');
-                    link.classList.add('bg-gray-800', 'text-gray-300');
-                }
-            });
-        };
-
-
-        // --- DOMContentLoaded listener and event attachments ---
-        document.addEventListener('DOMContentLoaded', async () => {
-            const navLinks = document.querySelectorAll('.nav-link');
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const accordionHeaders = document.querySelectorAll('.accordion-header');
-            const filterButtons = document.querySelectorAll('.filter-button');
-            const productSearchInput = document.getElementById('product-search-input');
-            const cartItemsContainer = document.getElementById('cart-items-container');
-
-            // Transaction page elements
-            const proceedToCheckoutBtn = document.getElementById('proceed-to-checkout-btn');
-            const continueToPaymentBtn = document.getElementById('continue-to-payment-btn');
-            const paymentConfirmedBtn = document.getElementById('payment-confirmed-btn'); // This button is now the primary action in payment section
-            const backToCartBtn = document.getElementById('back-to-cart-btn');
-            const addressSection = document.getElementById('address-section');
-            const paymentSection = document.getElementById('payment-section');
-
-            // Address input fields
-            const fullNameInput = document.getElementById('full-name');
-            const emailInput = document.getElementById('email');
-            const addressLine1Input = document.getElementById('address-line1');
-            const addressLine2Input = document.getElementById('address-line2');
-            const cityInput = document.getElementById('city');
-            const stateInput = document.getElementById('state');
-            const pincodeInput = document.getElementById('pincode');
-            const phoneNumberInput = document.getElementById('phone-number');
-
-            // Pop-up modal elements
-            const welcomeModal = document.getElementById('welcome-modal');
-            const closeModalBtn = document.getElementById('close-modal-btn');
-            const acknowledgeModalBtn = document.getElementById('acknowledge-modal-btn');
-
-            // Show welcome modal if not dismissed before
-            if (localStorage.getItem('welcomeModalDismissed') !== 'true') {
-                welcomeModal.classList.remove('hidden');
-            }
-
-            // Close modal event listeners
-            closeModalBtn.addEventListener('click', () => {
-                welcomeModal.classList.add('hidden');
-                localStorage.setItem('welcomeModalDismissed', 'true');
-            });
-
-            acknowledgeModalBtn.addEventListener('click', () => {
-                welcomeModal.classList.add('hidden');
-                localStorage.setItem('welcomeModalDismissed', 'true');
-            });
-
-            // Event listeners for navigation links
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault(); // Prevent default link behavior
-                    const page = link.dataset.page;
-                    if (page === 'products') {
-                        currentActiveCategory = 'all';
-                    }
-                    showPage(`${page}-page`);
-                    // Close mobile menu if open
-                    if (!mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
-                    }
+                        const category = e.target.dataset.category;
+                        const searchTerm = productSearchInput.value.toLowerCase();
+                        filterAndSearchProducts(category, searchTerm);
+                    });
                 });
-            });
+            }
 
-            // Mobile menu toggle
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+            function filterAndSearchProducts(category, searchTerm) {
+                let filtered = products.filter(product => {
+                    const matchesCategory = (category === 'all' || product.category === category);
+                    const matchesSearch = product.name.toLowerCase().includes(searchTerm) ||
+                                          (product.description && product.description.toLowerCase().includes(searchTerm));
+                    return matchesCategory && matchesSearch;
+                });
+                renderProducts(filtered);
+            }
 
             // Accordion functionality for FAQ
-            accordionHeaders.forEach(header => {
+            document.querySelectorAll('.accordion-header').forEach(header => {
                 header.addEventListener('click', () => {
                     const content = header.nextElementSibling;
-                    header.classList.toggle('active');
-                    content.classList.toggle('open');
-                    if (content.classList.contains('open')) {
-                        content.style.maxHeight = content.scrollHeight + "px";
+                    const isOpen = content.classList.contains('open');
+
+                    // Close all other open accordions
+                    document.querySelectorAll('.accordion-content.open').forEach(openContent => {
+                        if (openContent !== content) {
+                            openContent.classList.remove('open');
+                            openContent.style.maxHeight = null;
+                            openContent.previousElementSibling.classList.remove('active');
+                        }
+                    });
+
+                    // Toggle current accordion
+                    if (isOpen) {
+                        content.classList.remove('open');
+                        content.style.maxHeight = null;
+                        header.classList.remove('active');
                     } else {
-                        content.style.maxHeight = "0";
+                        content.classList.add('open');
+                        content.style.maxHeight = content.scrollHeight + "px"; // Set max-height to scrollHeight
+                        header.classList.add('active');
                     }
                 });
             });
 
-            // Product filtering functionality (buttons on products page)
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    currentActiveCategory = button.dataset.category; // Update global active category
-                    filterProducts(); // Re-filter products based on new category and current search
-                });
-            });
+            // EmailJS integration for placing order
+            if (shippingForm) {
+                shippingForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    placeOrderBtn.disabled = true; // Disable button to prevent multiple submissions
+                    placeOrderBtn.textContent = 'Placing Order...';
 
-            // Search input event listener
-            if (productSearchInput) {
-                productSearchInput.addEventListener('input', filterProducts);
-            }
-
-            // Add to Cart button event listeners
-            document.querySelectorAll('.add-to-cart').forEach(button => {
-                button.addEventListener('click', async (e) => {
-                    const productName = e.target.dataset.name;
-                    const productPrice = parseFloat(e.target.dataset.price);
-                    await addItemToCart(productName, productPrice);
-                });
-            });
-
-            // Event delegation for quantity and remove buttons in cart
-            if (cartItemsContainer) {
-                cartItemsContainer.addEventListener('click', async (e) => {
-                    // Check if the clicked element or its parent is a quantity button
-                    const quantityBtn = e.target.closest('.quantity-btn');
-                    if (quantityBtn) {
-                        const itemName = quantityBtn.dataset.name.trim(); // Trim name for consistency
-                        const action = quantityBtn.dataset.action;
-                        let itemToUpdate = cartItems.find(item => item.name === itemName);
-
-                        if (itemToUpdate) {
-                            if (action === 'increase') {
-                                if (itemToUpdate.quantity < MAX_PRODUCT_QUANTITY) { // Enforce max limit
-                                    itemToUpdate.quantity++;
-                                    showToast(`${itemName} quantity increased to ${itemToUpdate.quantity}!`);
-                                } else {
-                                    showToast(`Maximum quantity (${MAX_PRODUCT_QUANTITY}) reached for ${itemName}.`);
-                                }
-                            } else if (action === 'decrease') {
-                                if (itemToUpdate.quantity > 1) {
-                                    itemToUpdate.quantity--;
-                                    showToast(`${itemName} quantity decreased to ${itemToUpdate.quantity}.`);
-                                } else {
-                                    const indexToRemove = cartItems.findIndex(item => item.name === itemName);
-                                    if (indexToRemove !== -1) {
-                                        cartItems.splice(indexToRemove, 1);
-                                        showToast(`${itemName} removed from cart.`);
-                                    }
-                                }
-                            }
-                            // Always re-render the cart after any quantity change or removal to ensure UI consistency
-                            renderCartItems();
-                            updateCartCount();
-                            calculateCartTotals();
-                        } else {
-                            console.warn(`Attempted to update quantity for non-existent item: ${itemName}. Re-rendering cart.`);
-                            renderCartItems(); // Fallback to full re-render if item not found (e.g., after removal)
-                            updateCartCount();
-                        }
-                    } else if (e.target.closest('.remove-item-btn')) {
-                        const itemName = e.target.closest('.remove-item-btn').dataset.name.trim(); // Trim name for consistency
-                        const indexToRemove = cartItems.findIndex(item => item.name === itemName);
-                        if (indexToRemove !== -1) {
-                            cartItems.splice(indexToRemove, 1); // Remove item from array
-                            showToast(`${itemName} removed from cart.`);
-                        }
-                        renderCartItems(); // Re-render cart after removal
-                        updateCartCount();
-                    }
-                });
-            }
-
-
-            // Event listener for Proceed to Checkout button
-            if (proceedToCheckoutBtn) {
-                proceedToCheckoutBtn.addEventListener('click', () => {
-                    if (cartItems.length === 0) {
-                        showToast("Your cart is empty. Please add items before proceeding to checkout.");
-                        return; // Prevent navigating if cart is empty
-                    }
-                    showPage('transaction-menu-page'); // Call without distance parameter
-                });
-            }
-
-            // Event listener for Continue to Payment button
-            if (continueToPaymentBtn) {
-                continueToPaymentBtn.addEventListener('click', () => {
-                    // Simple validation for required address fields
-                    const fullName = fullNameInput.value.trim();
-                    const email = emailInput.value.trim();
-                    const addressLine1 = addressLine1Input.value.trim();
-                    const city = cityInput.value.trim();
-                    const state = stateInput.value.trim();
-                    const pincode = pincodeInput.value.trim();
-                    const phoneNumber = phoneNumberInput.value.trim();
-
-                    // Email Validation: Check for @ and . after @
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(email)) {
-                        showToast("Please enter a valid email address (e.g., user@example.com).");
-                        return;
-                    }
-
-                    // Phone Number Validation: Must start with +91 and have 10 digits after
-                    const phoneRegex = /^\+91\d{10}$/;
-                    if (!phoneRegex.test(phoneNumber)) {
-                        showToast("Please enter a valid Indian phone number starting with +91 followed by 10 digits (e.g., +919876543210).");
-                        return;
-                    }
-
-                    if (fullName === '' || addressLine1 === '' || city === '' || state === '' || pincode === '') {
-                        showToast("Please fill in all required address fields.");
-                        return;
-                    }
-
-                    // Hide address section and show payment section
-                    if (addressSection) addressSection.classList.add('hidden');
-                    if (paymentSection) paymentSection.classList.remove('hidden');
-                    // The paymentConfirmedBtn will be visible by default in the payment section
-                    if (paymentConfirmedBtn) paymentConfirmedBtn.classList.remove('hidden'); // Ensure it's visible
-                });
-            }
-
-            // Event listener for "I have paid" button (triggers EmailJS)
-            if (paymentConfirmedBtn) {
-                paymentConfirmedBtn.addEventListener('click', async () => {
-                    if (cartItems.length === 0) {
-                        showToast('Your cart is empty. Please add items before purchasing.');
-                        showPage('products-page'); // Redirect to products page if cart is empty
-                        return;
-                    }
-
-                    // Gather all order details
-                    const orderDetails = {
-                        fullName: fullNameInput.value.trim(),
-                        email: emailInput.value.trim(),
-                        addressLine1: addressLine1Input.value.trim(),
-                        addressLine2: addressLine2Input.value.trim(),
-                        city: cityInput.value.trim(),
-                        state: stateInput.value.trim(),
-                        pincode: pincodeInput.value.trim(),
-                        phoneNumber: phoneNumberInput.value.trim(),
-                        cartItems: cartItems.map(item => ({
-                            name: item.name,
-                            price: item.price,
-                            quantity: item.quantity
-                        })),
-                        subtotal: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-                        shippingCost: SHIPPING_CHARGE,
-                        totalAmount: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + SHIPPING_CHARGE,
-                        orderDate: new Date().toLocaleString()
-                    };
-
-                    // Prepare items for email template
-                    const itemsList = orderDetails.cartItems.map(item =>
-                        `${item.name} (Qty: ${item.quantity}) - ₹${item.price.toLocaleString('en-IN')}`
-                    ).join('\n');
+                    const name = document.getElementById('name').value;
+                    const address = document.getElementById('address').value;
+                    const email = document.getElementById('email').value;
+                    const orderSummary = cartItems.map(item => `${item.name} (x${item.quantity}) - ₹${(item.price * item.quantity).toLocaleString()}`).join('\n');
+                    const orderTotal = checkoutTotal.textContent;
 
                     const templateParams = {
-                        to_name: "Inkémon Admin", // Or a specific admin name
-                        from_name: orderDetails.fullName,
-                        customer_email: orderDetails.email,
-                        customer_phone: orderDetails.phoneNumber,
-                        shipping_address: `${orderDetails.addressLine1}, ${orderDetails.addressLine2 ? orderDetails.addressLine2 + ', ' : ''}${orderDetails.city}, ${orderDetails.state} - ${orderDetails.pincode}`,
-                        order_details: itemsList,
-                        subtotal: `₹${orderDetails.subtotal.toLocaleString('en-IN')}`,
-                        shipping_cost: `₹${orderDetails.shippingCost.toLocaleString('en-IN')}`,
-                        total_amount: `₹${orderDetails.totalAmount.toLocaleString('en-IN')}`,
-                        order_date: orderDetails.orderDate,
-                        // Add other fields as needed by your EmailJS template
+                        from_name: name,
+                        to_email: email,
+                        message: `Order Details:\n${orderSummary}\n\nTotal: ${orderTotal}\nShipping Address: ${address}`,
+                        order_summary_html: cartItems.map(item => `<li>${item.name} (x${item.quantity}) - ₹${(item.price * item.quantity).toLocaleString()}</li>`).join('')
                     };
 
                     try {
-                        // IMPORTANT: Replace "YOUR_SERVICE_ID" and "YOUR_TEMPLATE_ID" with your actual EmailJS credentials
-                        // You need to create an email service and a template in your EmailJS account.
-                        const response = await emailjs.send("service_3nyswo9", "template_pwyhzdr", templateParams); // <<< REPLACE THESE
+                        // Ensure your service ID and template ID are correct
+                        const response = await emailjs.send("service_w1c22hr", "template_pwyhzdr", templateParams); // <<< REPLACE THESE
                         console.log('Email sent successfully!', response);
                         showToast('Purchase confirmed! Order placed successfully. Order details sent to your email.');
                     } catch (error) {
@@ -1364,6 +973,8 @@
                         updateCartCount(); // Update header cart count
                         renderCartItems(); // Explicitly re-render cart to show it's empty
                         showPage('home-page'); // Navigate back to home or a confirmation page
+                        placeOrderBtn.disabled = false; // Re-enable button
+                        placeOrderBtn.textContent = 'Place Order';
                     }
                 });
             }
@@ -1375,9 +986,40 @@
                 });
             }
 
+            // Modal functionality
+            function showInfoModal() {
+                infoModalOverlay.classList.add('show');
+            }
+
+            function hideInfoModal() {
+                infoModalOverlay.classList.remove('show');
+            }
+
+            if (infoModalCloseBtn) {
+                infoModalCloseBtn.addEventListener('click', hideInfoModal);
+            }
+
+            if (infoModalOkBtn) {
+                infoModalOkBtn.addEventListener('click', hideInfoModal);
+            }
+
+            if (infoModalOverlay) {
+                infoModalOverlay.addEventListener('click', (e) => {
+                    if (e.target === infoModalOverlay) {
+                        hideInfoModal();
+                    }
+                });
+            }
+
+            if (infoModalOpenBtn) {
+                infoModalOpenBtn.addEventListener('click', showInfoModal);
+            }
+
             // Initialize to show the home page and set active link
             showPage('home-page');
             updateCartCount(); // Initialize cart count on load
+            renderProducts(); // Initial render of all products
+            showInfoModal(); // Show the pop-up on page load
         });
     </script>
 </body>
